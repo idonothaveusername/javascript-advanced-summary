@@ -1,0 +1,158 @@
+第一部分 基础JavaScript
+1、JavaScript（官方命名是ECMAScript）指的是一种编程语言。
+2、等号的两种不同用法：
+一个单独的等号：为变量赋值
+三个连续的等号：比较两个值（值和类型都相等才为true）
+3、语句“做事情”，表达式产生值。
+4、单行注释有两个斜杠//开始，行终止时结束；多行注释/*  */
+5、合法的标识符：第一个字符必须是字母、$、_
+6、点（.）操作符可以读取属性（str.length），也可以用于给属性赋值（obj.foo=123;），调用方法（'hello'.toUpperCase()）。
+7、原始值：布尔值、数字、字符串、null、undefined
+    原始值特点：按值进行比较、不可改变（其属性不能被改变、添加或移除）
+8、对象：除原始值之外其他的值都是对象（简单对象、数组、正则表达式）
+特点：按引用进行比较（比较身份标识）、默认可变
+9、undefined：未被初始化的变量（var foo;foo）、丢失的参数（function f(x) {return x};f()）、访问不存在的属性(var obj = {};obj.foo)；
+null：
+undefined和null都没有属性
+10、对值进行分类的操作符：
+typeof ：主要用于原始值，typeof true；‘boolean’ 
+ typeof null；‘object’      typeof 函数；‘function’
+
+instanceof：用于对象。用法形如：value instanceof Constr
+var b = new Bar();b instanceof Bar ----true
+null instanceof Object----false
+{} instanceof Object---true
+11、布尔值
+会产生布尔值的运算符：
+二元逻辑运算符：&&、||
+前置逻辑运算符：！
+比较运算符：相等运算符（===、！==、==、！=）、排序运算符（针对字符串及数字  >、<、<=、>=）
+12、真值和假值
+以下的值会被解释为false（假值）
+undefined、null、false、-0、NaN、‘’
+Boolean(0)--false      Boolean([ ])--true
+13、二元逻辑运算符
+短路原则：
+&&：若第一个运算数是假值，返回它。否则，返回第二个运算数。
+||：若第一个运算数是真值，返回它。否则返回第二个运算数。
+14、数字
+JavaScript中所有数字都是浮点数：1 === 1.0 ---true
+特殊的数字：
+NaN：一个错误的值
+Infinity:多数情况下也是一个错误的值，比任何一个数都要大（NaN除外）
+-Infinity 比任何一个数都要小（NaN除外）
+15、算术运算符：加减乘除、取模、增量减量、负数、转变为数字
+16、字符串：
+字符串可以直接通过字符串字面量来创建（单引号、双引号），反斜杠\用于转义字符及产生一些控制字符。
+通过方括号来访问字符串中的单个字符。
+length属性可以对字符的个数进行计数。
+字符串是不可变的。
+字符串可用 + 进行连接。
+方法有：str.slice()   str.trim()   str.indexOf(str1)---若str1在str中存在，则返回str1中第一个字母在str中出现的位置，否则返回-1.
+17、语句
+（1）条件语句
+if —then—else        switch—case—default
+（2）循环语句
+for循环、while循环、do-while循环
+（3）break：跳离循环    continue：开始一个新的循环迭代
+18、函数
+通过函数声明的方式来定义函数，也可通过给变量赋值为函数表达式来定义函数。
+特殊变量arguments
+调用函数时：
+若参数过多，额外的参数会被忽略；丢失的参数会得到undefined这个值。
+19、异常捕获
+throw、try—catch
+20、闭包：函数以及它所连接的周围作用域中的变量
+IIFE模式：引入一个新的作用域（防止一个变量变成全局变量）
+21、对象和构造函数
+（1）单一对象
+对象是一组属性的集合。每个属性都是一个（键、值）对。
+在JavaScript中，可以直接通过对象字面量去创建普通对象。
+以函数作为值的属性被称为方法，可使用this对调用它们的对象进行引用。
+可使用in运算符检查属性是否存在 “ 属性名字”in 对象  ---true/false
+如果读取一个不存在的属性，会得到undefined。
+使用delete运算符移除属性：delete 对象.属性
+
+提取方法：
+'use strict';
+var jane = {name:'Jane',describe:function(){   return 'Person named' + this.name;}};
+
+>var func = jane.describe;
+>func()
+TypeError:Cannot read property 'name' of undefined
+解决方法
+>var func2 = jane.describe.bind(jane);
+>func2()
+'Person named Jane'
+
+方法中的函数：
+var jane = {
+name:'jane',
+friends['tarzan','cheeta'],
+logHiToFriends:function(){
+	'use strict';
+	this.friends.forEach(function(friend)){
+		console.log(this.name + 'say hi to'+friend);
+	});
+}
+}
+调用logHiToFriends方法：
+<1>将this保存在不同的变量中：
+logHiToFriends:function(){
+	'use strict';
+	var that = this;
+	this.friends.forEach(function(friend)){
+		console.log(that.name + 'say hi to'+friend);
+	});
+}
+<2>利用forEach的第二个参数，它可以给this指定一个值：
+logHiToFriends:function(){
+	'use strict';
+	this.friends.forEach(function(friend)){
+		console.log(this.name + 'say hi to'+friend);
+	}，this)
+}
+(2)构造函数：对象工厂
+构造函数的名称必须以大写字母开头，使用new关键字调用。
+22、数组
+（1）数组字面量
+可通过整数索引来访问。
+length属性表明数组有多少个元素，可用它来添加或删除元素；
+in操作符也可以在数组中正常的使用；
+数组是对象；
+（2）数组方法
+arr.slice()、push、pop、shift、unshift、join、indexOf
+（3）遍历数组
+forEach迭代数组并且将当前的元素和元素的index扔到一个函数中。
+['a','b','c'].forEach(function(elem,index){console.log(index + '.' +elem;)});
+0.a
+1.b
+2.c
+map 通过应用一个函数映射到现有的数组的每个已经存在的元素创建一个新的数组。
+[1,2,3].map(function(x){return x*x})---[1,4,9]
+23、正则表达式（第19章）
+使用斜线分割；
+方法：
+test（）方法：匹配吗
+/^a+b+$/.test('aaab')---true
+exec（）：匹配以及捕获分组
+/a(b+)a/.exec('_abbba_aba')---['abbba','bbb']
+返回的数组包含完整的匹配结果，它的索引从0开始，第一组被捕获的内容的索引是1，以此类推。
+replace（）方法：搜索和替换
+'<a><bbb>'.replace(/<(.*?)>/g,'[$1]') --- '[a] [bbb]'
+replace的第一个参数必须是一个带着/g标志的正则表达式；否则将只替换第一次出现的内容。
+24、Math
+是一个包含运算功能的对象；
+Math.abs(-2) --  2
+Math.pow(3,2) --  9
+Math.max(2,-1,5) ---  5
+Math.round(1.9)---  2
+Math.PI ---  3.141592653589793
+Math.cos(Math.PI) ---  -1
+25、标准库的其它功能
+Date、JSON、console.*系列方法
+
+
+
+
+第二部分    背景
